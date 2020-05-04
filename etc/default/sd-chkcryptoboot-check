@@ -4,7 +4,7 @@
 
 cat /etc/sd-chkcryptoboot/sd-chkcryptoboot.motd
 
-if [[$BOOTDISK]]; then
+if [ $BOOTDISK ]; then
 	ACTUAL=$(dd if=$BOOTDISK bs=512 count=$SECTORS status=none | b2sum);
 	SAVED=$(cat /etc/sd-chkcryptoboot/head.b2sum);
 	if test "$ACTUAL" != "$SAVED"; then 
@@ -12,7 +12,7 @@ if [[$BOOTDISK]]; then
 	fi
 fi
 
-if [[$ESP]]; then
+if [ $ESP ]; then
 	ACTUAL=$(dd if=$ESP bs=4M status=none | b2sum);
 	SAVED=$(cat /etc/sd-chkcryptoboot/esp.b2sum);
 	if test "$ACTUAL" != "$SAVED"; then 

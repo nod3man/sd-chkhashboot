@@ -5,7 +5,7 @@ build() {
 
 	add_dir "/etc/sd-chkcryptoboot"
 
-	if [[$BOOTDISK]]; then
+	if [ $BOOTDISK ]; then
 		touch /tmp/head.b2sum;
 		dd if=$BOOTDISK bs=512 count=$SECTORS | b2sum > /tmp/head.b2sum;
 		chown root:root /tmp/head.b2sum;
@@ -13,7 +13,7 @@ build() {
 		add_file "/tmp/head.b2sum" "/etc/sd-chkcryptoboot/head.b2sum";
 	fi
 
-	if [[$ESP]]; then
+	if [ $ESP ]; then
 		touch /tmp/esp.b2sum;
 		dd if=$ESP bs=4M | b2sum > /tmp/esp.b2sum;
 		chown root:root /tmp/esp.b2sum;
