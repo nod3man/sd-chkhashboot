@@ -4,7 +4,7 @@ pkgrel=1
 arch=(any)
 license=(WTFPL)
 conflicts=(mkinitcpio-chkcryptoboot mkinitcpio-sd-chkcryptoboot)
-depends=('usbtutils' 'pciutils')
+depends=('usbutils' 'pciutils')
 source=()
 md5sums=()
 
