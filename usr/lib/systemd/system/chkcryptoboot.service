@@ -1,0 +1,8 @@
+[Unit]
+Before=systemd-ask-password-console.path
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+StandardOutput=tty
+ExecStart=/etc/chkcryptoboot/chkcryptoboot-check
