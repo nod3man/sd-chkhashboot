@@ -1,9 +1,10 @@
-pkgname=mkinitcpio-sd-chkcryptoboot
-pkgver=c00922d
+pkgname=sd-chkcryptoboot-uefi
+pkgver=0.1
 pkgrel=1
 arch=(any)
 license=(WTFPL)
-conflicts=(mkinitcpio-chkcryptoboot)
+conflicts=(mkinitcpio-chkcryptoboot mkinitcpio-sd-chkcryptoboot)
+depends=('usbtutils' 'pciutils')
 source=()
 md5sums=()
 
@@ -18,10 +19,9 @@ build() {
 package() {
 	# XXX
 	cp -aR ../etc ../usr .
-
-	install -D {${srcdir},${pkgdir}}/etc/default/chkcryptoboot.conf
-	install -D {${srcdir},${pkgdir}}/etc/default/chkcryptoboot.motd
-	install -D {${srcdir},${pkgdir}}/etc/default/chkcryptoboot-check
+	install -D {${srcdir},${pkgdir}}/etc/default/sd-chkcryptoboot.conf
+	install -D {${srcdir},${pkgdir}}/etc/default/sd-chkcryptoboot.motd
+	install -D {${srcdir},${pkgdir}}/etc/default/sd-chkcryptoboot-check
 	install -D {${srcdir},${pkgdir}}/usr/lib/initcpio/install/sd-chkcryptoboot
-	install -D {${srcdir},${pkgdir}}/usr/lib/systemd/system/chkcryptoboot.service
+	install -D {${srcdir},${pkgdir}}/usr/lib/systemd/system/sd-chkcryptoboot.service
 }

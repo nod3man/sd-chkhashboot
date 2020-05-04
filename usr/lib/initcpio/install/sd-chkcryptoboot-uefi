@@ -1,0 +1,50 @@
+#!/bin/bash
+
+build() {
+	. /etc/default/sd-chkcryptoboot.conf
+
+	add_dir "/etc/sd-chkcryptoboot"
+
+	if [[$BOOTDISK]]; then
+		touch /tmp/head.b2sum;
+		dd if=$BOOTDISK bs=512 count=$SECTORS | b2sum > /tmp/head.b2sum;
+		chown root:root /tmp/head.b2sum;
+		chmod 600 /tmp/head.b2sum;
+		add_file "/tmp/head.b2sum" "/etc/sd-chkcryptoboot/head.b2sum";
+	fi
+
+	if [[$ESP]]; then
+		touch /tmp/esp.b2sum;
+		dd if=$ESP bs=4M | b2sum > /tmp/esp.b2sum;
+		chown root:root /tmp/esp.b2sum;
+		chmod 600 /tmp/esp.b2sum;
+		add_file "/tmp/esp.b2sum" "/etc/sd-chkcryptoboot/esp.b2sum";
+	fi
+
+	touch /tmp/{lspci,lsusb,lsblk}.b2sum
+	chown root:root /tmp/{lspci,lsusb,lsblk}.b2sum
+	chmod 600 /tmp/{lspci,lsusb,lsblk}.b2sum
+
+	lsusb | b2sum > /tmp/lsusb.b2sum
+	lspci | b2sum > /tmp/lspci.b2sum
+	lsblk -Snrx SERIAL -o MODEL,SERIAL,SIZE,WWN,HCTL,TRAN,SUBSYSTEMS,REV,VENDOR | b2sum > /tmp/lsblk.b2sum
+
+	add_binary "/usr/bin/b2sum"
+	add_binary "/usr/bin/lsusb"
+	add_binary "/usr/bin/lspci"
+	add_binary "/usr/bin/lsblk"
+
+	add_file "/etc/default/sd-chkcryptoboot.conf" "/etc/sd-chkcryptoboot/sd-chkcryptoboot.conf"
+	add_file "/etc/default/sd-chkcryptoboot-check" "/etc/sd-chkcryptoboot/sd-chkcryptoboot-check"
+	add_file "/etc/default/sd-chkcryptoboot.motd" "/etc/sd-chkcryptoboot/sd-chkcryptoboot.motd"
+	add_file "/etc/udev/hwdb.bin"
+	add_file "/usr/share/hwdata/pci.ids"
+	add_file "/usr/share/hwdata/usb.ids"
+
+	add_file "/tmp/lsusb.b2sum" "/etc/sd-chkcryptoboot/lsusb.b2sum"
+	add_file "/tmp/lspci.b2sum" "/etc/sd-chkcryptoboot/lspci.b2sum"
+	add_file "/tmp/lsblk.b2sum" "/etc/sd-chkcryptoboot/lsblk.b2sum"
+	add_file "/usr/lib/systemd/system/sd-chkcryptoboot.service"
+	add_file "/etc/systemd/system/sd-chkcryptoboot.service.d/override.conf"
+	add_symlink "/usr/lib/systemd/system/cryptsetup.target.wants/sd-chkcryptoboot.service" "/usr/lib/systemd/system/sd-chkcryptoboot.service"
+}

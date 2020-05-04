@@ -1,0 +1,49 @@
+#!/bin/sh
+
+. /etc/sd-chkcryptoboot/sd-chkcryptoboot.conf
+
+cat /etc/sd-chkcryptoboot/sd-chkcryptoboot.motd
+
+if [[$BOOTDISK]]; then
+	ACTUAL=$(dd if=$BOOTDISK bs=512 count=$SECTORS status=none | b2sum);
+	SAVED=$(cat /etc/sd-chkcryptoboot/head.b2sum);
+	if test "$ACTUAL" != "$SAVED"; then 
+		echo "sd-chkcryptoboot: wrong head.b2sum"; exit 1; 
+	fi
+fi
+
+if [[$ESP]]; then
+	ACTUAL=$(dd if=$ESP bs=4M status=none | b2sum);
+	SAVED=$(cat /etc/sd-chkcryptoboot/esp.b2sum);
+	if test "$ACTUAL" != "$SAVED"; then 
+		echo "sd-chkcryptoboot: wrong esp.b2sum"; exit 1;
+	fi
+fi
+
+ACTUAL=$(lsusb | b2sum)
+SAVED=$(cat /etc/sd-chkcryptoboot/lsusb.b2sum)
+if test "$ACTUAL" != "$SAVED"; then 
+	echo "sd-chkcryptoboot: wrong lsusb.b2sum"; exit 1;
+fi
+
+ACTUAL=$(lspci | b2sum)
+SAVED=$(cat /etc/sd-chkcryptoboot/lspci.b2sum)
+if test "$ACTUAL" != "$SAVED"; then 
+	echo "sd-chkcryptoboot: wrong lspci.b2sum"; exit 1; 
+fi
+
+ACTUAL=$(lsblk -Snrx SERIAL -o MODEL,SERIAL,SIZE,WWN,HCTL,\
+TRAN,SUBSYSTEMS,REV,VENDOR | b2sum)
+SAVED=$(cat /etc/sd-chkcryptoboot/lsblk.b2sum)
+if test "$ACTUAL" != "$SAVED"; then 
+	echo "sd-chkcryptoboot: wrong lsblk.b2sum"; exit 1; 
+fi
+
+for p in $(cat /proc/cmdline); do
+	if test "$p" = "$CMDLINE_NAME=$CMDLINE_VALUE"; then 
+		echo "sd-chkcryptoboot: everything nominal"; exit 0;
+	fi
+done
+
+echo "sd-chkcryptoboot: wrong cmdline"
+exit 2

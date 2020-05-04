@@ -1,23 +1,30 @@
 sd-chkcryptoboot
 ================
 
-A mkinitcpio hook for Arch Linux to check if the machine was tampered
-with, before typing the passphrase of the root partition.
+A mkinitcpio hook for encrypted UEFI installation of Arch Linux 
+with systemd init. Checks if the machine was tampered with, before 
+typing the passphrase of the root partition.
 
-Inspired by: https://github.com/grazzolini/mkinitcpio-chkcryptoboot
+If you don't need UEFI support, use original [sd-chkcryptoboot](https://gitlab.com/artefact2/sd-chkcryptoboot/).
+
+Inspired by: 
+* https://github.com/grazzolini/mkinitcpio-chkcryptoboot
+* https://gitlab.com/artefact2/sd-chkcryptoboot/
 
 If you don't use full disk encryption, you don't need this.
 
-**Requires an encrypted boot partition with a different passphrase! If
-  not, it's trivially easy to fake all the checks.**
+**An encrypted boot partition with a different passphrase is strongly recommended! 
+  If not, it's trivially easy to fake all the checks.**
 
 Features
 ========
 
 * Checks bootloader integrity.
+* Checks ESP integrity.
 * Checks USB and PCI devices (using `lsusb` and `lspci`).
 * Checks block devices (using `lsblk`).
-* Shows a customisable secret message before the password prompt, to make sure you aren't booting someone else's boot partition.
+* Shows a customisable secret message before the password prompt, 
+  to make sure you aren't booting someone else's boot partition.
 
 Installation
 ============
@@ -25,11 +32,15 @@ Installation
 Before tweaking with the boot process, **have a live USB image ready**
 in case anything goes wrong and you end up with an unbootable system,
 as unlikely as that is.
-
-* Build the package:
+* Download package:
   ~~~
-  makepkg
-  sudo pacman -U mkinitcpio-sd-chkcryptoboot-*.pkg.*
+  git clone https://github.com/nod3man/sd-chkcryptoboot-uefi /tmp/sd-chkcryptoboot-uefi
+  ~~~
+
+* Build and install the package:
+  ~~~
+  cd /tmp/sd-chkcryptoboot-uefi
+  makepkg -si
   ~~~
 
 * Edit the configuration file:
@@ -61,13 +72,13 @@ as unlikely as that is.
 
 * Rebuild the init image:
   ~~~
-  sudo mkinitcpio -p linux
+  sudo mkinitcpio -P
   ~~~
 
 Threat model
 ============
 
-**sd-chkcryptoboot can protect against *some* physical attacks, but
+**sd-chkcryptoboot-uefi can protect against *some* physical attacks, but
 doesn't claim to catch all possible attacks. EFI backdoors, or clever
 hardware keylogging is still possible, among others.**
 
@@ -96,7 +107,7 @@ Cons:
   partition with a fake password prompt that will just accept any
   passphrase.
 
-## Ciphering the boot and root partition, and using sd-chkcryptoboot
+## Ciphering the boot and root partition, and using sd-chkcryptoboot-uefi
 
 Pros:
 
