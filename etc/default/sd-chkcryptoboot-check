@@ -19,9 +19,9 @@ if [ $ESPPART ]; then
 	mount /dev/disk/by-id/$BOOTDISKID-part$ESPPART /tmp/efi;
 
 	if [ $EFIPATH ]; then
-		ACTUAL=$(dd if=$(/tmp/efi/$EFIPATH) bs=4M status=none | b2sum);
+		ACTUAL=$(dd if=/tmp/efi/$EFIPATH bs=4M status=none | b2sum);
 	else
-		ACTUAL=$(dd if=$(/dev/disk/by-id/$BOOTDISKID-part$ESPPART) bs=4M status=none | b2sum);
+		ACTUAL=$(dd if=/dev/disk/by-id/$BOOTDISKID-part$ESPPART bs=4M status=none | b2sum);
 	fi
 
 	if test "$ACTUAL" != "$SAVED"; then 
