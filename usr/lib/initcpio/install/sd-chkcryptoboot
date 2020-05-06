@@ -17,7 +17,7 @@ build() {
 
 	if [ $ESPPART ]; then
 		touch /tmp/efi.b2sum;
-		EFIMOUNT=$(mount | grep $(readlink -f /dev/disk/by-id/$BOOTDISKID-part$ESPPART) | awk '{print 3}')
+		EFIMOUNT=$(mount | grep $(readlink -f /dev/disk/by-id/$BOOTDISKID-part$ESPPART) | awk '{print $3}')
 
 		if [ ! $EFIMOUNT ]; then
 			echo "ERROR: Your ESP is not mounted! Mount ESP and regenerate initrd.";
