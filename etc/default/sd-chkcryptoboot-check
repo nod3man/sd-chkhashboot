@@ -3,14 +3,15 @@
 . /etc/sd-chkcryptoboot/sd-chkcryptoboot.conf
 
 cat /etc/sd-chkcryptoboot/sd-chkcryptoboot.motd
-echo "\n"
+echo -e "\n";
 
 if [ $SECTORS ]; then
 	ACTUAL=$(dd if=/dev/disk/by-id/$BOOTDISKID bs=512 count=$SECTORS status=none | b2sum);
 	SAVED=$(cat /etc/sd-chkcryptoboot/head.b2sum);
 	if test "$ACTUAL" != "$SAVED"; then 
-		echo "sd-chkcryptoboot: wrong head.b2sum"; exit 1;
+		echo "ATTENTION: sd-chkcryptoboot: wrong head.b2sum";
 	fi
+	echo "HEADCHECK: OK";
 fi
 
 if [ $ESPPART ]; then
@@ -28,6 +29,7 @@ if [ $ESPPART ]; then
 		echo "ATTENTION: sd-chkcryptoboot: wrong efi.b2sum";
 	fi
 	umount /tmp/efi;
+	echo "EFICHECK: OK";
 fi
 
 ACTUAL=$(lsusb | b2sum)
@@ -35,12 +37,14 @@ SAVED=$(cat /etc/sd-chkcryptoboot/lsusb.b2sum)
 if test "$ACTUAL" != "$SAVED"; then 
 	echo "ATTENTION: sd-chkcryptoboot: wrong lsusb.b2sum";
 fi
+echo "USBCHECK: OK";
 
 ACTUAL=$(lspci | b2sum)
 SAVED=$(cat /etc/sd-chkcryptoboot/lspci.b2sum)
 if test "$ACTUAL" != "$SAVED"; then 
 	echo "ATTENTION: sd-chkcryptoboot: wrong lspci.b2sum";
 fi
+echo "PCICHECK: OK";
 
 ACTUAL=$(lsblk -Snrx SERIAL -o MODEL,SERIAL,SIZE,WWN,HCTL,\
 TRAN,SUBSYSTEMS,REV,VENDOR | b2sum)
@@ -48,15 +52,13 @@ SAVED=$(cat /etc/sd-chkcryptoboot/lsblk.b2sum)
 if test "$ACTUAL" != "$SAVED"; then 
 	echo "ATTENTION: sd-chkcryptoboot: wrong lsblk.b2sum";
 fi
+echo "DISKSCHECK: OK";
 
 for p in $(cat /proc/cmdline); do
-	if test "$p" = "$CMDLINE_NAME=$CMDLINE_VALUE"; then 
+	if test "$p" = "$CMDLINE_NAME=$CMDLINE_VALUE"; then
+		echo "CMDLINE-CHECK: OK";
 		echo "sd-chkcryptoboot: everything nominal"; exit 0;
 	else
-		echo "sd-chkcryptoboot: wrong cmdline"
-		exit 2
+		echo "ATTENTION: sd-chkcryptoboot: wrong cmdline"; exit 0;
 	fi
 done
-
-
-
