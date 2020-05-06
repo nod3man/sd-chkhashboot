@@ -1,0 +1,6 @@
+- [] Increase blocksize in dd commands for speed
+- [] Fix or refactor cmdline check
+- [] Change name to sd-chkhashboot
+- [] Change logo to sd-chkhashboot
+- [] Change readme file
+- [] Make pretty boot messages
