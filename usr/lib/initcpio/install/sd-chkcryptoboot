@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 build() {
 	. /etc/default/sd-chkcryptoboot.conf
 
