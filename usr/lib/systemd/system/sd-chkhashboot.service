@@ -5,4 +5,4 @@ DefaultDependencies=no
 [Service]
 Type=oneshot
 StandardOutput=tty
-ExecStart=/etc/sd-chkcryptoboot/sd-chkcryptoboot-check
+ExecStart=/etc/sd-chkhashboot/sd-chkhashboot-check
