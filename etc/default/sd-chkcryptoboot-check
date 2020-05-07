@@ -56,9 +56,7 @@ echo "DISKSCHECK: OK";
 
 for p in $(cat /proc/cmdline); do
 	if test "$p" = "$CMDLINE_NAME=$CMDLINE_VALUE"; then
-		echo "CMDLINE-CHECK: OK";
-		echo "sd-chkcryptoboot: everything nominal"; exit 0;
-	else
-		echo "ATTENTION: sd-chkcryptoboot: wrong cmdline"; exit 0;
+		echo "CMDLINE-CHECK: OK"; exit 0;
 	fi
 done
+echo "ATTENTION: sd-chkcryptoboot: wrong cmdline"; exit 0
