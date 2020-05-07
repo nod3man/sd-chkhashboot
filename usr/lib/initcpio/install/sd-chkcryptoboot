@@ -25,12 +25,12 @@ build() {
 		fi
 
 		if [ $EFIPATH ]; then
-			dd if=$EFIMOUNT/$EFIPATH | b2sum > /tmp/efi.b2sum;
+			dd if=$EFIMOUNT/$EFIPATH bs=4M status=none | b2sum > /tmp/efi.b2sum;
 			chown root:root /tmp/efi.b2sum;
 			chmod 600 /tmp/efi.b2sum;
 			add_file "/tmp/efi.b2sum" "/etc/sd-chkcryptoboot/efi.b2sum";
 		else
-			dd if=/dev/disk/by-id/$BOOTDISKID-part$ESPPART | b2sum > /tmp/efi.b2sum
+			dd if=/dev/disk/by-id/$BOOTDISKID-part$ESPPART bs=4M status=none | b2sum > /tmp/efi.b2sum
 			chown root:root /tmp/efi.b2sum;
 			chmod 600 /tmp/efi.b2sum;
 			add_file "/tmp/efi.b2sum" "/etc/sd-chkcryptoboot/efi.b2sum";
