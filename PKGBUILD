@@ -1,9 +1,9 @@
-pkgname=sd-chkcryptoboot-uefi
+pkgname=sd-chkhashboot
 pkgver=0.1
 pkgrel=1
 arch=(any)
 license=(WTFPL)
-conflicts=(mkinitcpio-chkcryptoboot mkinitcpio-sd-chkcryptoboot)
+conflicts=(mkinitcpio-chkcryptoboot mkinitcpio-sd-chkhashboot)
 depends=('usbutils' 'pciutils')
 source=()
 md5sums=()
@@ -19,9 +19,9 @@ build() {
 package() {
 	# XXX
 	cp -aR ../etc ../usr .
-	install -D {${srcdir},${pkgdir}}/etc/default/sd-chkcryptoboot.conf
-	install -D {${srcdir},${pkgdir}}/etc/default/sd-chkcryptoboot.motd
-	install -D {${srcdir},${pkgdir}}/etc/default/sd-chkcryptoboot-check
-	install -D {${srcdir},${pkgdir}}/usr/lib/initcpio/install/sd-chkcryptoboot
-	install -D {${srcdir},${pkgdir}}/usr/lib/systemd/system/sd-chkcryptoboot.service
+	install -D {${srcdir},${pkgdir}}/etc/default/sd-chkhashboot.conf
+	install -D {${srcdir},${pkgdir}}/etc/default/sd-chkhashboot.motd
+	install -D {${srcdir},${pkgdir}}/etc/default/sd-chkhashboot-check
+	install -D {${srcdir},${pkgdir}}/usr/lib/initcpio/install/sd-chkhashboot
+	install -D {${srcdir},${pkgdir}}/usr/lib/systemd/system/sd-chkhashboot.service
 }

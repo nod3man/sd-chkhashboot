@@ -1,17 +1,16 @@
 #!/bin/bash
 
-
 build() {
-	. /etc/default/sd-chkcryptoboot.conf
+	. /etc/default/sd-chkhashboot.conf
 
-	add_dir "/etc/sd-chkcryptoboot"
+	add_dir "/etc/sd-chkhashboot"
 
 	if [ $SECTORS ]; then
 		touch /tmp/head.b2sum;
 		dd if=/dev/disk/by-id/$BOOTDISKID bs=512 count=$SECTORS | b2sum > /tmp/head.b2sum;
 		chown root:root /tmp/head.b2sum;
 		chmod 600 /tmp/head.b2sum;
-		add_file "/tmp/head.b2sum" "/etc/sd-chkcryptoboot/head.b2sum";
+		add_file "/tmp/head.b2sum" "/etc/sd-chkhashboot/head.b2sum";
 	fi
 
 
@@ -28,12 +27,12 @@ build() {
 			dd if=$EFIMOUNT/$EFIPATH bs=4M status=none | b2sum > /tmp/efi.b2sum;
 			chown root:root /tmp/efi.b2sum;
 			chmod 600 /tmp/efi.b2sum;
-			add_file "/tmp/efi.b2sum" "/etc/sd-chkcryptoboot/efi.b2sum";
+			add_file "/tmp/efi.b2sum" "/etc/sd-chkhashboot/efi.b2sum";
 		else
 			dd if=/dev/disk/by-id/$BOOTDISKID-part$ESPPART bs=4M status=none | b2sum > /tmp/efi.b2sum
 			chown root:root /tmp/efi.b2sum;
 			chmod 600 /tmp/efi.b2sum;
-			add_file "/tmp/efi.b2sum" "/etc/sd-chkcryptoboot/efi.b2sum";
+			add_file "/tmp/efi.b2sum" "/etc/sd-chkhashboot/efi.b2sum";
 		fi
 	fi
 
@@ -51,17 +50,17 @@ build() {
 	add_binary "/usr/bin/lspci"
 	add_binary "/usr/bin/lsblk"
 
-	add_file "/etc/default/sd-chkcryptoboot.conf" "/etc/sd-chkcryptoboot/sd-chkcryptoboot.conf"
-	add_file "/etc/default/sd-chkcryptoboot-check" "/etc/sd-chkcryptoboot/sd-chkcryptoboot-check"
-	add_file "/etc/default/sd-chkcryptoboot.motd" "/etc/sd-chkcryptoboot/sd-chkcryptoboot.motd"
+	add_file "/etc/default/sd-chkhashboot.conf" "/etc/sd-chkhashboot/sd-chkhashboot.conf"
+	add_file "/etc/default/sd-chkhashboot-check" "/etc/sd-chkhashboot/sd-chkhashboot-check"
+	add_file "/etc/default/sd-chkhashboot.motd" "/etc/sd-chkhashboot/sd-chkhashboot.motd"
 	add_file "/etc/udev/hwdb.bin"
 	add_file "/usr/share/hwdata/pci.ids"
 	add_file "/usr/share/hwdata/usb.ids"
 
-	add_file "/tmp/lsusb.b2sum" "/etc/sd-chkcryptoboot/lsusb.b2sum"
-	add_file "/tmp/lspci.b2sum" "/etc/sd-chkcryptoboot/lspci.b2sum"
-	add_file "/tmp/lsblk.b2sum" "/etc/sd-chkcryptoboot/lsblk.b2sum"
-	add_file "/usr/lib/systemd/system/sd-chkcryptoboot.service"
-	add_file "/etc/systemd/system/sd-chkcryptoboot.service.d/override.conf"
-	add_symlink "/usr/lib/systemd/system/cryptsetup.target.wants/sd-chkcryptoboot.service" "/usr/lib/systemd/system/sd-chkcryptoboot.service"
+	add_file "/tmp/lsusb.b2sum" "/etc/sd-chkhashboot/lsusb.b2sum"
+	add_file "/tmp/lspci.b2sum" "/etc/sd-chkhashboot/lspci.b2sum"
+	add_file "/tmp/lsblk.b2sum" "/etc/sd-chkhashboot/lsblk.b2sum"
+	add_file "/usr/lib/systemd/system/sd-chkhashboot.service"
+	add_file "/etc/systemd/system/sd-chkhashboot.service.d/override.conf"
+	add_symlink "/usr/lib/systemd/system/cryptsetup.target.wants/sd-chkhashboot.service" "/usr/lib/systemd/system/sd-chkhashboot.service"
 }

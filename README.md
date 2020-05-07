@@ -1,11 +1,9 @@
-sd-chkcryptoboot
+sd-chkhashboot
 ================
 
-A mkinitcpio hook for encrypted UEFI installation of Arch Linux 
+A mkinitcpio hook for encrypted installation of Arch Linux 
 with systemd init. Checks if the machine was tampered with, before 
 typing the passphrase of the root partition.
-
-If you don't need UEFI support, use original [sd-chkcryptoboot](https://gitlab.com/artefact2/sd-chkcryptoboot/).
 
 Inspired by: 
 * https://github.com/grazzolini/mkinitcpio-chkcryptoboot
@@ -34,18 +32,18 @@ in case anything goes wrong and you end up with an unbootable system,
 as unlikely as that is.
 * Download package:
   ~~~
-  git clone https://github.com/nod3man/sd-chkcryptoboot-uefi /tmp/sd-chkcryptoboot-uefi
+  git clone https://github.com/nod3man/sd-chkhashboot /tmp/sd-chkhashboot
   ~~~
 
 * Build and install the package:
   ~~~
-  cd /tmp/sd-chkcryptoboot-uefi
+  cd /tmp/sd-chkhashboot
   makepkg -si
   ~~~
 
 * Edit the configuration file:
   ~~~
-  sudoedit /etc/default/chkcryptoboot.conf
+  sudoedit /etc/default/sd-chkhashboot.conf
   ~~~
 
 * Edit the prompt message with something unique you remember (like an ASCII map):
@@ -63,11 +61,11 @@ as unlikely as that is.
   Requires=dev-disk-by\x2did-usb\x2dCorsair_Survivor_3.0_22C2018251270274\x2d0:0.device
   ~~~
 
-* Add `sd-chkcryptoboot` to your list of HOOKS in `mkinitcpio.conf`
+* Add `sd-chkhashboot` to your list of HOOKS in `mkinitcpio.conf`
   ~~~
   sudoedit /etc/mkinitcpio.conf
 
-  HOOKS="base systemd ... sd-chkcryptoboot sd-encrypt ..."
+  HOOKS="base systemd ... sd-chkhashboot sd-encrypt ..."
   ~~~
 
 * Rebuild the init image:
@@ -78,7 +76,7 @@ as unlikely as that is.
 Threat model
 ============
 
-**sd-chkcryptoboot-uefi can protect against *some* physical attacks, but
+**sd-chkhashboot can protect against *some* physical attacks, but
 doesn't claim to catch all possible attacks. EFI backdoors, or clever
 hardware keylogging is still possible, among others.**
 
@@ -107,7 +105,7 @@ Cons:
   partition with a fake password prompt that will just accept any
   passphrase.
 
-## Ciphering the boot and root partition, and using sd-chkcryptoboot-uefi
+## Ciphering the boot and root partition, and using sd-chkhashboot
 
 Pros:
 
@@ -120,7 +118,7 @@ Pros:
   stored as ciphertext. If an attacker replaces the boot partition
   with a fake one that accepts any passphrase, you won't see your
   message and know that you aren't booting the right kernel. You can
-  now be sure that the checks made by sd-chkcryptoboot aren't fake
+  now be sure that the checks made by sd-chkhashboot aren't fake
   messages and can also know that your devices, or bootloader, haven't
   been tampered with (at least not in a way that's easy to see).
 
