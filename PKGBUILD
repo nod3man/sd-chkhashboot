@@ -9,7 +9,8 @@ source=()
 md5sums=()
 
 pkgver() {
-	git describe --always | sed -e 's/\./-/g'
+  cd "$pkgname"
+  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {
